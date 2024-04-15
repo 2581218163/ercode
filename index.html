@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollable List with Images</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            /* 设置背景图片 */
+            background-image: url('x.jpg');
+            background-size: 100% 100%; /* 图片覆盖整个容器 */
+            background-attachment: fixed; /* 背景图片不随着页面的滚动而滚动 */
+            /* 使用媒体查询针对特定尺寸进行适配 */
+            @media (max-width: 600px) {
+                body {
+                    /* 在小屏幕上调整背景图片的大小或位置 */
+                    background-size: cover; /* 保持图片的纵横比，同时填充整个容器 */
+                }
+
+            }
+        /* 在这里添加CSS样式 */
+        .container {
+            margin-top: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* 调整容器高度以适应屏幕 */
+            /*background: #f7f7f7; !* 背景颜色 *!*/
+        }
+
+        .list-container {
+            flex: 1;
+            overflow-y: auto;
+            height: 300px; /* 列表容器高度 */
+            border: none;
+            background: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 0;
+        }
+
+        .scrollable-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .scrollable-list li {
+            cursor: pointer;
+            padding: 10px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.3s ease;
+        }
+
+        .scrollable-list li:last-child {
+            border-bottom: none;
+        }
+
+        .scrollable-list li:hover {
+            background-color: #f9f9f9;
+        }
+
+        .scrollable-list li.selected {
+            background-color: #e0e0e0;
+        }
+
+        .image-container {
+            flex: 1;
+            margin-left: 20px;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #selectedItemImage {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        #selectedItemImage:hover {
+            transform: scale(1.1);
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="list-container">
+        <ul id="myList" class="scrollable-list">
+            <!-- 列表项目将在这里动态生成 -->
+        </ul>
+    </div>
+    <div class="image-container">
+        <img id="selectedItemImage" src="" alt="Selected Item Image" />
+    </div>
+</div>
+
+<script>
+    // 在这里添加JavaScript代码
+    // 模拟一些列表数据和图片
+    const listItems = [
+        // 假设这里填充了10个项目的数据，包括文本和图片URL
+        { text: '云艺', imageUrl: 'ewm.png' },
+        { text: '云南民族大学', imageUrl: 'ewm.png' },
+        { text: '云师大', imageUrl: 'w.jpg' },
+        { text: '云大', imageUrl: 'w.jpg' },
+        { text: '昆工', imageUrl: 'w.jpg' },
+        { text: '云南开大', imageUrl: 'w.jpg' },
+        { text: '云中医', imageUrl: 'w.jpg' },
+        { text: '昆医', imageUrl: 'w.jpg' },
+        { text: '交职', imageUrl: 'w.jpg' }
+        // ...
+    ];
+
+    const listElement = document.getElementById('myList');
+    const imageElement = document.getElementById('selectedItemImage');
+    let selectedIndex = -1; // 设置默认选中的索引为0，即第一个列表项
+
+    // 渲染列表
+    listItems.forEach((item, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = item.text;
+        listItem.dataset.imageUrl = item.imageUrl;
+        listItem.dataset.index = index;
+        listItem.addEventListener('click', handleListItemClick);
+
+        // 如果是第一个列表项，则默认高亮并显示其图片
+        if (index === 0) {
+            listItem.style.backgroundColor = '#e0e0e0'; // 高亮显示
+            imageElement.src = item.imageUrl; // 显示默认图片
+        }
+
+        listElement.appendChild(listItem);
+    });
+
+    // 处理列表项点击事件
+    function handleListItemClick(event) {
+        const clickedElement = event.currentTarget;
+        const newIndex = parseInt(clickedElement.dataset.index, 10);
+        const newImageUrl = clickedElement.dataset.imageUrl;
+
+        // 清除之前选定的项目高亮
+        if (selectedIndex !== -1) {
+            const prevSelectedItem = listElement.children[selectedIndex];
+            prevSelectedItem.classList.remove('selected');
+        }
+
+        selectedIndex = newIndex;
+        const selectedItem = listElement.children[selectedIndex];
+        selectedItem.classList.add('selected'); // 添加高亮类
+
+        // 更新图片
+        imageElement.src = newImageUrl;
+    }
+</script>
+
+</body>
+</html>
